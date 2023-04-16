@@ -1,0 +1,25 @@
+name: "Example OIDC"
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  run:
+    name: "List bucket contents"
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: "ubuntu-latest"
+    steps:
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{ secrets.PROVIDER_URL }} # this is the output provider_name from the TF module
+          service_account: ${{ secrets.SA_EMAIL }} # this is a SA email configured using the TF module with access to YOUR-GCS-BUCKET
+
+      - id: "list-bucket-contents"
+        run: |-
+          curl -sSf https://storage.googleapis.com/storage/v1/b/test-bucket-mndghwiq/o \
+            --header "Authorization: Bearer ${{ steps.auth.outputs.access_token }}"
