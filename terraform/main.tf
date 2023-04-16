@@ -3,6 +3,8 @@ provider "google" {
 }
 
 resource "google_project_service" "main" {
+  // These are the APIs necessary to use WIF
+
   for_each = toset([
     "iam.googleapis.com",
     "cloudresourcemanager.googleapis.com",
@@ -15,7 +17,7 @@ resource "google_project_service" "main" {
 }
 
 resource "google_storage_bucket" "main" {
-  name     = "github-example-wif"
+  name     = var.bucket_name
   location = "EU"
 }
 

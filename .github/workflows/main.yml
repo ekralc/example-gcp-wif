@@ -4,6 +4,10 @@ on:
     branches:
       - "main"
 
+env:
+  # ADD YOUR OWN BUCKET NAME HERE
+  BUCKET_NAME: github-example-wif
+
 jobs:
   run:
     name: "List bucket contents"
@@ -16,10 +20,10 @@ jobs:
         uses: "google-github-actions/auth@v1"
         with:
           token_format: "access_token"
-          workload_identity_provider: ${{ secrets.PROVIDER_NAME }} # this is the output provider_name from the TF module
-          service_account: ${{ secrets.SA_EMAIL }} # this is a SA email configured using the TF module with access to YOUR-GCS-BUCKET
+          workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
+          service_account: ${{ secrets.SA_EMAIL }}
 
       - id: "list-bucket-contents"
         run: |-
-          curl -sSf https://storage.googleapis.com/storage/v1/b/github-example-wif/o \
+          curl -sSf https://storage.googleapis.com/storage/v1/b/$BUCKET_NAME/o \
             --header "Authorization: Bearer ${{ steps.auth.outputs.access_token }}"
