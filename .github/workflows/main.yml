@@ -21,5 +21,5 @@ jobs:
 
       - id: "list-bucket-contents"
         run: |-
-          curl -sSf https://storage.googleapis.com/storage/v1/b/test-bucket-mndghwiq/o \
+          curl -sSf https://storage.googleapis.com/storage/v1/b/github-example-wif/o \
             --header "Authorization: Bearer ${{ steps.auth.outputs.access_token }}"
